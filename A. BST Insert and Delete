@@ -1,0 +1,123 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+// Implement Insert and Delete methods of Binary Search Tree. You have to follow the template:
+
+// +The first line of input contains one integer number N (1 < N < 1000),
+// that denote the number of elements in the tree.
+
+// +The second line contains N integer numbers (1 < number < 10 000,
+// numbers you need to insert in the tree.
+
+// +The third line contains one integer number M (1 < M < 10 000),
+// that denote number of elements you need to delete from the tree
+
+// +The fourth line contains M integer numbers (1 < number < 10 000),
+// numbers you need to delete from the tree.
+
+// +The fifths line contains one integer number X (1 < X < 1000).
+
+// If X number exists in the tree print "YES", if not print "NO".
+
+class BinarySearchTree {
+public:
+
+    int BinarySearch(long element) {
+        if (this->elements.empty()) {
+            return -1;
+        }
+        size_t low = 0;
+        size_t high = this->elements.size() - 1;
+        size_t mid = (low + high) / 2;
+
+        while (true) {
+            if (element == this->elements[mid]) {
+                return mid;
+            }
+            else if (high == low || (high - low < 2)) {
+                if (mid + 1 < this->elements.size() 
+                    && this->elements[mid + 1] == element)
+
+                    return mid + 1;
+                else
+                    return -1;
+            }
+            if (element < this->elements[mid]) {
+                high = mid;
+            }
+            if (element > this->elements[mid]) {
+                low = mid;
+            }
+            mid = (high + low) / 2;
+        }
+
+
+    }
+
+    // Binary tree stores numbers as elements
+    // Implement insertion method
+    // return true if insertion is successful
+    // return false if element exists in the tree
+    bool Insert(int element) {
+        if (this->elements.empty()) {
+            this->elements.push_back(element);
+        }
+        else if (BinarySearch(element) == -1)
+            this->elements.push_back(element);
+        else
+            return false;
+
+        return true;
+    }
+
+    // Search the tree to see if it contains the element
+    // return true if element was deleted from the tree
+    // return false if there is no such element in the tree
+    bool Delete(int element) {
+        int ind = BinarySearch(element);
+        //std::cout << "\n index=" << ind << "\n";
+        if (ind != -1)
+            this->elements.erase(this->elements.begin() + ind);
+        else
+            return false;
+
+        return true;
+    }
+    std::vector<long> elements;
+};
+
+std::ostream& operator<< (std::ostream& out, const std::vector<long>& v) {
+    long size = v.size();
+    for (long i = 0; i < size; i++) {
+        out << v[i] << " ";
+    }
+    out << std::endl;
+
+    return out;
+}
+
+int main() {
+    int N, M, X, number;
+
+    std::cin >> N;
+    
+    BinarySearchTree tree;
+
+    for (long i = 0; i < N; i++) {
+        std::cin >> number;
+        tree.Insert(number);
+    }
+    //std::cout << tree.elements;
+    std::sort(tree.elements.begin(), tree.elements.end());
+    std::cin >> M;
+
+    for (long i = 0; i < M; i++) {
+        std::cin >> number;
+        tree.Delete(number);
+    }
+
+    //std::cout << tree.elements;
+    std::cin >> X;
+
+    std::cout << ((tree.BinarySearch(X) != -1) ? "YES" : "NO") << std::endl;
+}
