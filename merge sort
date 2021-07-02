@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+
+void MergeSort(std::vector<long>& v);
+void SMerge(std::vector<long>& b, long iBegin, long iEnd, std::vector<long>& v);
+void TopDownMerge(std::vector<long>& v, long iBegin, long iMiddle, long iEnd, std::vector<long>& b);
+void CopyArray(std::vector<long>& v, long iBegin, long iEnd, std::vector<long>& b);
+
+void MergeSort(std::vector<long>& v) {
+    long n = v.size();
+    std::vector<long> b(n);
+    CopyArray(v, 0, n, b);
+    SMerge(b, 0, n, v);
+}
+
+void SMerge(std::vector<long>& b,long iBegin,long iEnd, std::vector<long>& v)
+{
+    if (iEnd - iBegin < 2)
+        return;
+ 
+    long iMiddle = (iEnd + iBegin) / 2;
+
+    SMerge(v, iBegin, iMiddle, b);
+    SMerge(v, iMiddle, iEnd, b);
+ 
+    TopDownMerge(b, iBegin, iMiddle, iEnd, v);
+}
+
+
+void TopDownMerge(std::vector<long>& v, long iBegin, long iMiddle, long iEnd, std::vector<long>& b)
+{
+    long i = iBegin, j = iMiddle;
+
+    for (long k = iBegin; k < iEnd; k++) {
+
+        if (i < iMiddle && (j >= iEnd || v[i] <= v[j])) {
+            b[k] = v[i];
+            i = i + 1;
+        }
+        else {
+            b[k] = v[j];
+            j = j + 1;
+        }
+    }
+}
+
+void CopyArray(std::vector<long>& v,long iBegin,long iEnd, std::vector<long>& b)
+{
+    for (long k = iBegin; k < iEnd; k++)
+        b[k] = v[k];
+}
+int main() {
+
+    int n;
+    std::cin >> n;
+
+    std::vector<long> numbers(n);
+    for (long& number : numbers) {
+        std::cin >> number;
+    }
+
+    MergeSort(numbers);
+
+    for (long number : numbers) {
+        std::cout << number << ' ';
+    }
+
+    return 0;
+}
