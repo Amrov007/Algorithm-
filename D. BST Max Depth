@@ -1,0 +1,95 @@
+#include <iostream>
+#include <vector>
+// Implement Insert and MaxDepth methods of Binary Search Tree. You have to follow the template:
+
+// The first line of input contains one integer number N (1 < N < 1000),
+// that denote the number of elements in the tree.
+// The second line contains N integer numbers (1 < number < 10 000).
+
+// Print the number of nodes along the longest path from the root
+// node down to the farthest leaf node.
+struct Node {
+    Node* left;
+    Node* right;
+    long val;
+
+    Node(const long& val) : val(val), left(nullptr), right(nullptr) {}
+    //Node() : left(nullptr), right(nullptr) {}
+};
+
+
+class BinarySearchTree {
+    Node* tree = nullptr;
+    Node* temp = nullptr;
+    long counter = 0, t = 0;
+public:
+    // Binary tree stores numbers as elements
+    // Implement insertion method
+    // return true if insertion is successful
+    // return false if element exists in the tree
+    bool Insert(int element) {
+        if (temp == tree) {
+            t = 0;
+        }
+        if (tree)  {
+            t++;
+            if (tree->val < element) {
+                if (tree->right == nullptr) {
+                    tree->right = new Node(element);
+                    t++;
+                    return true;
+                }
+                else {
+                    tree = tree->right;
+                    Insert(element);
+                }
+            }
+            else if (tree->val > element) {
+                if (tree->left == nullptr) {
+                    tree->left = new Node(element);
+                    t++;
+                    return true;
+                }
+                else {
+                    tree = tree->left;
+                    Insert(element);
+                }
+            }
+            else {
+                return false;
+            }
+
+        }
+        else if ((tree == temp)&&(temp == nullptr)) {
+            tree = new Node(element);
+            temp = tree;
+            return true;
+        }
+        if (counter < t)
+            counter = t;
+        if (temp != tree) {
+            tree = temp;
+        }
+    }
+
+    // Compute the number of nodes along the longest path
+    // from the root node down to the farthest leaf node.
+    size_t MaxDepth() {
+        return counter;
+    }
+
+};
+
+int main() {
+    long N, number;
+    BinarySearchTree tree;
+
+    std::cin >> N;
+
+    for (long i = 0; i < N; i++) {
+        std::cin >> number;
+        tree.Insert(number);
+    }
+
+    std::cout << tree.MaxDepth() << std::endl;
+}
