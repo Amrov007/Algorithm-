@@ -1,0 +1,44 @@
+#include <vector>
+#include <iostream>
+
+void swap(long& a, long& b) {
+    a = a + b;
+    b = a - b;
+    a = a - b;
+}
+
+void InsertionSort(std::vector<long>& v) {
+    int vsize = v.size();
+    for (int i = 0; i < vsize; i++) {
+        for (int j = i + 1; j >= 1; j--) {
+            if (j == vsize) {
+                break;
+            }
+            if (v[j - 1] < v[j]) {
+                continue;
+            }
+            else {
+                swap(v[j], v[j - 1]);
+            }
+        }
+    }
+}
+
+int main() {
+
+    int n;
+    std::cin >> n;
+
+    std::vector<long> numbers(n);
+    for (long& number : numbers) {
+        std::cin >> number;
+    }
+
+    InsertionSort(numbers);
+
+    for (long number : numbers) {
+        std::cout << number << ' ';
+    }
+
+    return 0;
+}
